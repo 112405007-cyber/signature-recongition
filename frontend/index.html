@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signature Recognition System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-signature"></i> Signature Recognition System</h1>
+                <p>Advanced AI-powered signature verification and analysis</p>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="upload">
+                <i class="fas fa-upload"></i> Upload & Analyze
+            </button>
+            <button class="nav-tab" data-tab="verify">
+                <i class="fas fa-check-circle"></i> Verify Against Template
+            </button>
+            <button class="nav-tab" data-tab="templates">
+                <i class="fas fa-folder"></i> My Templates
+            </button>
+            <button class="nav-tab" data-tab="history">
+                <i class="fas fa-history"></i> History
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload & Analyze Tab -->
+            <div class="tab-content active" id="upload">
+                <div class="upload-section">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h3>Upload Signature Image</h3>
+                            <p>Drag and drop your signature image here or click to browse</p>
+                            <input type="file" id="fileInput" accept="image/*" hidden>
+                            <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                                Choose File
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-options">
+                        <div class="form-group">
+                            <label for="templateName">Save as Template (Optional)</label>
+                            <input type="text" id="templateName" placeholder="Enter template name">
+                        </div>
+                        <button class="btn btn-success" id="analyzeBtn" disabled>
+                            <i class="fas fa-search"></i> Analyze Signature
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-section" id="resultsSection" style="display: none;">
+                    <h3>Analysis Results</h3>
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="authenticity-score">
+                                <span class="score-label">Authenticity Score</span>
+                                <span class="score-value" id="authenticityScore">0.0</span>
+                            </div>
+                            <div class="confidence-level">
+                                <span class="confidence-label">Confidence</span>
+                                <span class="confidence-value" id="confidenceLevel">0.0</span>
+                            </div>
+                        </div>
+                        <div class="result-status" id="resultStatus">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Analysis in progress...</span>
+                        </div>
+                        <div class="result-details" id="resultDetails"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verify Against Template Tab -->
+            <div class="tab-content" id="verify">
+                <div class="verify-section">
+                    <div class="upload-area" id="verifyUploadArea">
+                        <div class="upload-content">
+                            <i class="fas fa-file-signature"></i>
+                            <h3>Upload Signature to Verify</h3>
+                            <p>Select a signature image to verify against your templates</p>
+                            <input type="file" id="verifyFileInput" accept="image/*" hidden>
+                            <button class="btn btn-primary" onclick="document.getElementById('verifyFileInput').click()">
+                                Choose File
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="template-selection">
+                        <div class="form-group">
+                            <label for="templateSelect">Select Template</label>
+                            <select id="templateSelect">
+                                <option value="">Choose a template...</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success" id="verifyBtn" disabled>
+                            <i class="fas fa-check-double"></i> Verify Signature
+                        </button>
+                    </div>
+                </div>
+
+                <div class="verification-results" id="verificationResults" style="display: none;">
+                    <h3>Verification Results</h3>
+                    <div class="result-card">
+                        <div class="result-header">
+                            <div class="authenticity-score">
+                                <span class="score-label">Match Score</span>
+                                <span class="score-value" id="matchScore">0.0</span>
+                            </div>
+                            <div class="confidence-level">
+                                <span class="confidence-label">Confidence</span>
+                                <span class="confidence-value" id="matchConfidence">0.0</span>
+                            </div>
+                        </div>
+                        <div class="result-status" id="verificationStatus">
+                            <i class="fas fa-question-circle"></i>
+                            <span>Verification in progress...</span>
+                        </div>
+                        <div class="result-details" id="verificationDetails"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates Tab -->
+            <div class="tab-content" id="templates">
+                <div class="templates-section">
+                    <div class="section-header">
+                        <h3>My Signature Templates</h3>
+                        <button class="btn btn-primary" id="refreshTemplates">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="templates-grid" id="templatesGrid">
+                        <div class="loading">Loading templates...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Tab -->
+            <div class="tab-content" id="history">
+                <div class="history-section">
+                    <div class="section-header">
+                        <h3>Verification History</h3>
+                        <button class="btn btn-primary" id="refreshHistory">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                    <div class="history-list" id="historyList">
+                        <div class="loading">Loading history...</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="loading-spinner">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Processing signature...</p>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/signature-scanner.js"></script>
+</body>
+</html>
